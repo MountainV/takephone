@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>takeperso Vorschau</title>
+    <link rel="stylesheet" href="html/style.css">
+    <style>
+        /* Nur für die Vorschau im Browser, wird im Spiel nicht geladen */
+        body { background: #3a3f47; overflow: auto; padding: 30px; }
+        #preview { display: flex; flex-wrap: wrap; gap: 30px; }
+        #menu { position: static; }
+        .silhouette { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <div id="preview"></div>
+
+    <!-- Elemente, die script.js erwartet -->
+    <div class="hidden">
+        <div id="menu"><div id="menu-items"></div><span id="menu-subtitle"></span><span id="menu-counter"></span><div id="menu-desc"></div></div>
+        <div id="card-wrapper"><div id="card"></div></div>
+    </div>
+
+    <script src="html/script.js"></script>
+    <script>
+        const holder = {
+            firstname: 'Max', lastname: 'Mustermann', dob: '12.08.1994',
+            sex: 'M', birthplace: 'Los Santos', nationality: 'Los Santos'
+        };
+        const base = {
+            holder, country: 'LOS SANTOS', countryCode: 'LS',
+            authority: 'STADT LOS SANTOS', issued: '14.03.2022', accessNumber: '417302'
+        };
+        const examples = [
+            { ...base, template: 'id', number: 'L01X00T47', expires: '14.03.2032' },
+            { ...base, template: 'driver', number: 'B072RRE2I55', expires: '14.03.2037', classes: 'AM, A1, B, L' },
+            { ...base, template: 'weapon', number: 'W8K3M2P9R', expires: '14.03.2027', classes: 'KURZWAFFEN' }
+        ];
+
+        const silhouette = `<svg class="silhouette" viewBox="0 0 100 130" preserveAspectRatio="xMidYMax slice">
+            <rect width="100" height="130" fill="#b9bfc3"/>
+            <circle cx="50" cy="48" r="22" fill="#7d858b"/>
+            <path d="M8 130 C12 92 30 80 50 80 C70 80 88 92 92 130 Z" fill="#7d858b"/></svg>`;
+
+        const preview = document.getElementById('preview');
+        examples.forEach(doc => {
+            const el = document.createElement('div');
+            el.className = `card tpl-${doc.template}`;
+            el.innerHTML = templates[doc.template](doc, doc.holder, null);
+            el.querySelectorAll('.photo, .ghost').forEach(p => p.innerHTML = silhouette);
+            preview.appendChild(el);
+        });
+    </script>
+</body>
+</html>
